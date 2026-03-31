@@ -1,0 +1,58 @@
+
+Construction:
+Pass  New deque is empty
+Pass  New deque size == 0
+Pass  toString() on empty
+
+Push and Read:
+Pass  front() == 5
+Pass  back() == 30
+Pass  at(1) == 10
+
+Search:
+Pass  Search existing num index = 1
+Pass  Search not-exsisting num returns -1
+
+Update:
+Pass  update(0, 100)
+Pass  operator*= update
+
+Pop:
+Pass  pop_front() == 1
+Pass  pop_back() == 3
+Pass  Empty after all pops
+
+Remove:
+Pass  after remove(20) not found returns -1
+Pass  front()==30 after operator-=
+
+Clear:
+Pass  empty() after operator!
+Pass  size()==0 after operator!
+
+Deep Copy:
+Pass  Original unchanged after copy
+Pass  999 is not in original
+Pass  Original unchanged after assign
+Pass  777 not in original
+
+Comparisons:
+Pass  a == a
+Pass  a != b
+Pass  a < b
+Pass  a <= b
+Pass  b > a
+Pass  b >= a
+
+Exceptions:
+Pass  DequeException: pop_front empty
+Pass  DequeException: pop_back empty
+Pass  DequeException: front empty
+Pass  DequeException: back empty
+Pass  out_of_range: at()
+Pass  out_of_range: update()
+Pass  invalid_argument: remove()
+Pass  invalid_argument: operator-=
+
+Results: 35 / 35 passed
+All tests passed!
