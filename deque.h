@@ -19,7 +19,7 @@ namespace mydeque {
     private:
         /** Hidden implementation*/
         struct Impl;
-        Impl* pImpl;
+        Impl *pImpl;
 
     public:
 
