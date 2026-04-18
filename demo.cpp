@@ -2,7 +2,7 @@
 #include <iostream>
 
 using namespace std;
-using namespace mydeque;
+using namespace Mydeque;
 
 
 int main() {
@@ -13,7 +13,7 @@ int main() {
     dq.push_back(20);
     dq.push_back(30);
     dq.push_front(5);
-    dq += 40;                     
+    dq += 40;
 
     cout << "After pushes: " << dq.toString() << endl;
     cout << "size = " << dq.size() << "  empty = " << dq.empty() << endl;
@@ -32,8 +32,8 @@ int main() {
 
     cout << "\nupdate() / operator*=" << endl;
 
-    dq.update(0, 1);                        
-    dq *= Deque::UpdateArg{4, 100};         
+    dq.update({0, 1});
+    dq *= {4, 100};
 
     cout << "After update(0,1) and *={4,100}: " << dq.toString() << endl;
 
@@ -51,20 +51,20 @@ int main() {
     dq.push_back(60);
     cout << "Before remove: " << dq.toString() << endl;
 
-    dq.remove(20);          
-    dq -= 50;              
+    dq.remove(20);
+    dq -= 50;
     cout << "After remove: " << dq.toString() << endl;
 
- 
+
     cout << "\nDeep copy" << endl;
 
-    Deque dq2(dq);                 
+    Deque dq2(dq);
     dq2 += 999;
     cout << "Original: " << dq.toString()  << endl;
     cout << "Copy: " << dq2.toString() << endl;
 
     Deque dq3;
-    dq3 = dq;                       
+    dq3 = dq;
     dq3 += 777;
     cout << "Assigned: " << dq3.toString() << endl;
 
@@ -73,8 +73,8 @@ int main() {
 
     Deque small, large;
     small += 1;
-    large += 1; 
-    large += 2; 
+    large += 1;
+    large += 2;
     large += 3;
 
     cout << "small: " << small.toString() << endl;
@@ -99,7 +99,7 @@ int main() {
     try {
         Deque empty;
         empty.pop_front();
-    } 
+    }
     catch (const DequeException& e) {
         cout << "DequeException caught: " << e.what() << endl;
     }
@@ -107,7 +107,7 @@ int main() {
     try {
         Deque empty;
         empty.front();
-    } 
+    }
     catch (const DequeException& e) {
         cout << "DequeException caught: " << e.what() << endl;
     }
@@ -116,7 +116,7 @@ int main() {
         Deque d;
         d += 1;
         d.at(99);
-    } 
+    }
     catch (const out_of_range& e) {
         cout << "out_of_range caught:   " << e.what() << endl;
     }
@@ -125,7 +125,7 @@ int main() {
         Deque d;
         d += 1;
         d.remove(42);
-    } 
+    }
     catch (const invalid_argument& e) {
         std::cout << "invalid_argument caught: " << e.what() << endl;
     }

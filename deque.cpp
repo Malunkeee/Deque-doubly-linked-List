@@ -3,8 +3,10 @@
 #include <stdexcept>
 
 using namespace std;
-namespace mydeque {
+namespace Mydeque {
 
+DequeException::DequeException(const string& msg)
+    : runtime_error("DequeException " + msg) {}
 
 struct Node {
     int   value;
@@ -40,7 +42,7 @@ struct Deque::Impl {
 
         if (!tail) {
             head = tail = n;
-        } 
+        }
         else {
             n->prev = tail;
             tail->next = n;
@@ -52,10 +54,10 @@ struct Deque::Impl {
 
     void push_front(int value) {
         Node *n = new Node(value);
-        
+
         if (!head) {
             head = tail = n;
-        } 
+        }
         else {
             n->next = head;
             head->prev = n;
@@ -67,12 +69,12 @@ struct Deque::Impl {
     int pop_front() {
         Node *n = head;
         int val = n->value;
-        
+
         head = head->next;
-        
+
         if (head){
-           head->prev = nullptr; 
-        } 
+           head->prev = nullptr;
+        }
         else{
            tail = nullptr;
         }
@@ -93,8 +95,8 @@ struct Deque::Impl {
             tail->next = nullptr;
         }
         else{
-           head = nullptr; 
-        }  
+           head = nullptr;
+        }
 
         delete n;
         --count;
@@ -104,27 +106,27 @@ struct Deque::Impl {
 
     Node *node_at(int index) const {
         if (index >= count){
-           return nullptr; 
-        } 
+           return nullptr;
+        }
 
         Node* cur = head;
         for (int i = 0; i < index; ++i){
              cur = cur->next;
         }
-    
+
         return cur;
     }
 
     void unlink(Node *n) {
         if (n->prev){
             n->prev->next = n->next;
-        } 
+        }
         else {
             head = n->next;
-        }  
+        }
         if (n->next){
             n->next->prev = n->prev;
-        } 
+        }
         else {
             tail = n->prev;
         }
@@ -144,8 +146,8 @@ struct Deque::Impl {
         count = 0;
     }
 
-    bool empty() const { 
-        return count == 0; 
+    bool empty() const {
+        return count == 0;
     }
 };
 
@@ -191,13 +193,13 @@ int Deque::back() const {
     if (pImpl->empty()){
         throw DequeException("Function back() called on an empty deque.");
     }
-        
-    return pImpl->tail->value;
+
+    return pImpl->head->value;
 }
 
 int Deque::at(int index) const {
     if (index >= pImpl->count || index < 0){
-        throw out_of_range("Function at(): index " + to_string(index) + " is out of range."); 
+        throw out_of_range("Function at(): index " + to_string(index) + " is out of range.");
     }
     return pImpl->node_at(index)->value;
 }
@@ -208,7 +210,7 @@ Node* cur = pImpl->head;
     while (cur) {
         if (cur->value == value){
             return pos;
-        } 
+        }
         cur = cur->next;
         ++pos;
     }
@@ -237,15 +239,15 @@ string Deque::toString() const {
     return ss.str();
 }
 
-void Deque::update(int index, int value) {
-    if (index >= pImpl->count){
-        throw out_of_range("Function update(): index " + to_string(index) + " is out of range.");
+void Deque::update(const pair<int, int>& arg) {
+    if (arg.first >= pImpl->count){
+        throw out_of_range("Function update(): index " + to_string(arg.first) + " is out of range.");
     }
-    pImpl->node_at(index)->value = value;
+    pImpl->node_at(arg.first)->value = arg.second;
 }
 
-Deque& Deque::operator*=(const UpdateArg& arg) {
-    update(arg.index, arg.value);
+Deque& Deque::operator*=(const pair<int, int>& arg) {
+    update(arg);
     return *this;
 }
 
@@ -288,27 +290,43 @@ Deque& Deque::operator!() {
 
 
 bool Deque::operator==(const Deque& other) const {
-    return pImpl->count == other.pImpl->count;
+    if (pImpl->count != other.pImpl->count) return false;
+    Node* a = pImpl->head;
+    Node* b = other.pImpl->head;
+    while (a) {
+        if (a->value != b->value) return false;
+        a = a->next;
+        b = b->next;
+    }
+    return true;
 }
 
 bool Deque::operator!=(const Deque& other) const {
-    return pImpl->count != other.pImpl->count;
+    return !(*this == other);
 }
 
 bool Deque::operator<(const Deque& other) const {
+    Node* a = pImpl->head;
+    Node* b = other.pImpl->head;
+    while (a && b) {
+        if (a->value < b->value) return true;
+        if (a->value > b->value) return false;
+        a = a->next;
+        b = b->next;
+    }
     return pImpl->count < other.pImpl->count;
 }
 
 bool Deque::operator<=(const Deque& other) const {
-    return pImpl->count <= other.pImpl->count;
+    return !(other < *this);
 }
 
 bool Deque::operator>(const Deque& other) const {
-    return pImpl->count > other.pImpl->count;
+    return other < *this;
 }
 
 bool Deque::operator>=(const Deque& other) const {
-    return pImpl->count >= other.pImpl->count;
+    return !(*this < other);
 }
 
 }
